@@ -1,0 +1,18 @@
+### Http Status 404
+
+if you browse http://localhost:8080, get:
+
+HTTP Status 404 - /
+---------------------------------------------------------------------
+type Status report
+message /
+description The requested resource is not available.
+
+The solution is in eclipse
+1. Click on Window > Show view > Server or right click on the server in "Servers" view, select "Properties".
+2. In the "General" panel, click on the "Switch Location" button.
+3. The "Location: [workspace metadata]" should replace by something else.
+4. Open the Overview screen for the server by double clicking it.
+5. In the Server locations tab , select "Use Tomcat location".
+6. Save the configurations and restart the Server.
+
