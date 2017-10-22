@@ -1,0 +1,57 @@
+### LoginForm 
+
+# JSP
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+</head>
+<body>
+	<form action="servletTest" method="post">
+		아이디 : <input type="text" name="id" size="10"><br/>
+		비밀번호 : <input type="password" name="pwd" size="10"><br/>
+		<br/>
+		<input type="checkbox" name="hobby" value="read">독서
+		<input type="checkbox" name="hobby" value="ex">운동
+		<input type="checkbox" name="hobby" value="movie">영화
+		<br/>
+		<input type="submit" value="Submit">
+		<input type="reset" value="Reset">
+	</form>
+</body>
+</html>
+
+
+
+# Servlet
+@WebServlet("/servletTest")
+public class servletTest extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+  public servletTest() {
+        super();
+    }
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		request.setCharacterEncoding("EUC-KR");
+		
+    String id = request.getParameter("id");
+		String pwd = request.getParameter("pwd");
+		String[] hobby = request.getParameterValues("hobby");
+		
+		response.setContentType("text/html; charset=EUC-KR");
+		PrintWriter print = response.getWriter();
+		print.println(id+"<br/>");
+		print.println(pwd+"<br/>");
+		print.println(Arrays.toString(hobby)+"<br/>");
+		
+		print.close();	
+	}
+}
+
+
+
+
+
