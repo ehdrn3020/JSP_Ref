@@ -1,0 +1,28 @@
+### Servlet.java ###
+
+String id = getInitParameter("id");
+String pwd = getInitParameter("pw");
+		
+
+
+### web.xml ###
+<servlet>
+	<servlet-name>ServletInitParam</servlet-name>
+	<servlet-class>com.webTest.co.kr.ServletInitParam</servlet-class>
+	
+	<init-param>
+		<param-name>id</param-name>
+		<param-value>hongGD</param-value>
+	</init-param>
+	
+	<init-param>
+		<param-name>pw</param-name>
+		<param-value>pwd1234</param-value>
+	</init-param>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>ServletInitParam</servlet-name>
+	<url-pattern>/InitParam</url-pattern>
+</servlet-mapping>
+
