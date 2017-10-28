@@ -1,0 +1,18 @@
+### Use Parameter in xml anywhere in servelet class
+
+<context-param>
+  <param-name>id</param-name>
+  <param-value>honggildong</param-value>
+</context-param>
+
+<context-param>
+  <param-name>pw</param-name>
+  <param-value>12344</param-value>
+</context-param>
+
+
+### Servlet.java ###
+String id = getServletContext.getInitParameter("id");
+String pw = getServletContext.getInitParameter("pw");
+
+
