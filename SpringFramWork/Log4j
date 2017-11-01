@@ -1,0 +1,67 @@
+
+####
+jar 파일(log4j-1.2.15.jar)을 받아서 라이브러리에 추가합니다.
+#Add to Maven
+<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-log4j12</artifactId>
+		<version>1.7.13</version>
+</dependency>
+
+#Maven Dependencies
++ slf4j-log4j12-1.7.13.jar
++ slf4j-api-1.7.13.jar
++ log4j-1.2.17.jar
+
+
+
+####
+log4j설정파일을 만듭니다. 최상위 폴더에다가 log4j.properties 파일을 생성
+
+# Log4j Setting file
+log4j.rootLogger=INFO, console
+
+# Daily file log
+log4j.appender.logfile=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.logfile.File=D:/Data/Log/data.log
+log4j.appender.logfile.DatePattern='.'yyyy-MM-dd
+log4j.appender.logfile.layout=org.apache.log4j.PatternLayout
+log4j.appender.logfile.layout.ConversionPattern=[%d{HH:mm:ss}][%-5p](%F:%L)-%m%n
+
+# Console log
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%-5p%l -%m%n
+
+# log level and appender
+log4j.logger.name.of.the.package.one=DEBUG, console
+log4j.logger.name.of.the.package.two=INFO, logfile
+
+
+###
+프로그램내에직접설정
+
+Log4J를 사용하기 위해서는, 클래스 패스에 log4j-1.2.8을 포함해야 한다. 아래의 내용을 확인하면 추가하는 방법을 알 수 있다.
+
+
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+
+public class LoggerT
+{
+	protected static Logger logger = Logger.getLogger(LoggerT.class.getName());
+
+    public static void main(String[] args )
+    {
+    	//DEBUG < INFO < WARN < ERROR < FATAL
+    	BasicConfigurator.configure(); 
+    	logger.fatal("log4j:logger.fatal()");
+    	logger.error("log4j:logger.error()");
+    	logger.warn("log4j:logger.warn()");
+    	logger.info("log4j:logger.info()");
+    	logger.debug("log4j:logger.debug()");
+    }
+}
+
+콘솔에 로그정보가 찍힘
+
