@@ -1,0 +1,52 @@
+
+###File upload library download###
+http://www.servlets.com/cos/
+
+
+###copy jar file to project directory###
+cos.jar ->WEB-INF/lib copy 
+
+
+###index.jsp###
+<form action = "fileForm.jsp" method ="post" enctype="multipart/form-data">
+		File : <input type = "file" name ="file"><br/>
+		<input type = "submit" value="file upload">
+</form>
+
+
+###action.jsp###
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<%@ page import="java.util.Enumeration" %>
+<%@ page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy" %>
+<%@ page import="com.oreilly.servlet.MultipartRequest" %>
+<%
+		String path = request.getRealPath("fileData");
+		System.out.println(path);
+		int size = 1024 * 1024 * 10;
+		String file = "";
+		String orgFile = "";
+		
+		try{
+			//4th var is same file deal policy
+			MultipartRequest multi = new MultipartRequest(
+					request, path, size, "EUC-KR",new DefaultFileRenamePolicy());
+			Enumeration files = multi.getFileNames();
+			String str = (String)files.nextElement();
+			
+			file = multi.getFilesystemName(str);
+			orgFile = multi.getOriginalFileName(str);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+</head>
+<body>
+	<p>fileupload success</p>
+</body>
+</html>
