@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
+ <jsp:useBean id = "member" class="com.javac.Ex" scope = "page"/>
+ <jsp:setProperty name = "member" property ="strID" value="2081233"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -18,6 +20,8 @@
 	${ 1>2 }	
 	${(1>2)?1:2}
 	${(1>2) || (1<2)}
+	
+	${member.strID}
 </body>
 </html>
 
