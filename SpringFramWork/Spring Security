@@ -1,0 +1,111 @@
+1. POM.XML 파일에 라이브러리를 추가.
+ <!-- Spring Security -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>3.2.3.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>3.2.3.RELEASE</version>
+        </dependency>
+        <dependency>
+			      <groupId>org.slf4j</groupId>
+			      <artifactId>slf4j-log4j12</artifactId>
+			      <version>1.7.13</version>
+		    </dependency>
+		    <dependency>
+			      <groupId>javax.servlet</groupId>
+			      <artifactId>jstl</artifactId>
+			      <version>1.2</version>
+		    </dependency>
+     
+     
+     
+ 2. WEB.XML 수정 (main/webapp/WEB-INF/)
+
+        <context-param>
+		        <param-name>contextConfigLocation</param-name>
+		        <param-value>
+      			/WEB-INF/spring/root-context.xml
+      			/WEB-INF/spring/security-context.xml       
+     		</param-value>
+        </context-param>
+
+<!-- Security filter 추가 --> 
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>   
+
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+
+3. security-context.xml 파일 추가 (main/webapp/WEB-INF/spring)
+  <?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    	  
+    <http auto-config='true' >
+	    <intercept-url pattern="/images/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/login.do" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/login_duplicate.do" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/**" access="ROLE_USER" />
+        <form-login login-page="/login.do"
+                    username-parameter="id"
+                    password-parameter="pw"    
+                    login-processing-url="/loginProcess.do"
+                    default-target-url="/login_success.do"
+                    authentication-failure-url="/login.do"
+                    always-use-default-target='true'
+                    />
+         
+        <session-management>
+            <concurrency-control max-sessions="1" expired-url="/login_duplicate.do"/>
+        </session-management>
+    </http>
+     
+ <beans:bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>
+     
+    <authentication-manager>
+        <authentication-provider ref="customAuthenticationProvider"/>
+    </authentication-manager>
+     
+    <beans:bean id="customAuthenticationProvider" class="hira.od.or.pdo.web.CustomAuthenticationProvider"/>
+</beans:beans>
+
+
+
+4. Class File
+public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+
+		String user_id = (String) authentication.getPrincipal();
+		String user_pw = (String) authentication.getCredentials();
+
+		logger.info("사용자가 입력한 로그인정보입니다. {}", user_id);
+	
+	     if (user_id.equals("hira") && user_pw.equals("1234")) {
+			logger.info("정상 로그인입니다.");
+			List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
+			roles.add(new SimpleGrantedAuthority("ROLE_USER"));
+			UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(user_id, user_pw, roles);
+			result.setDetails(new CustomUserDetails(user_id, user_pw));
+			return result;
+		} else {
+			logger.info("사용자 크리덴셜 정보가 틀립니다. 에러가 발생합니다.");
+			throw new BadCredentialsException("Bad credentials");
+		}
+	}
+
+
