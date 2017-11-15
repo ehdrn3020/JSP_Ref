@@ -1,0 +1,23 @@
+Spring's Form Tag
+
+#Spring의 폼 태그는 다른 폼 태그 라이브러리와는 다르게 Spring Web MVC와 연동 될 수 있다. 
+#이는 태그에서 command 객체, controller 참조 데이터로의 접근이 가능하다는 것이다.
+#Spring Form tag의 사용방법은 매우 간단하며 예제를 중심으로 각 tag에 대한 내용을 살펴본다.
+
+configuration
+form tag
+input tag
+checkbox tag
+checkboxes tag
+radiobutton tag
+radiobuttons tag
+password tag
+select tag
+option tag
+options tag
+textarea tag
+hidden tag
+errors tag
+sample
+
+http://dev.anyframejava.org/anyframe/doc/web/3.0.1/webfw/springmvc/basic/tag.html#sample
