@@ -1,0 +1,96 @@
+parameterClass, parameterMap 정리
+
+parameterClass 와 parameterMap 은 ibatis에서 쿼리를 실행하기 위해 필요한 파라미터를 매핑하기 위한 방법이다.
+parameterClass 는 해당 클래스를 직접적으로 명시하여, 넘어온 파라미터와 매핑하는 것이고,
+parameterMap 은 넘어온 파라미터를 parameterMap 에 재배치하여 해당 Map 의 값으로 매핑하는 방법이다.
+파라미터 전달 방식은 parameterClass 와 parameterMap 둘 중에 한가지로 선택하면 된다.
+
+
+
+
+
+1. paramterClass
+
+
+parameterClass 속성값은 자바 클래스의 패키지를 포함한 전체 경로의 이름이다.
+parameterClass 속성은 옵션이지만 추천되는 사용 방법이다. 이것은 프레임워크 성능을 향상시키는 만큼 statement에 전달하는 파라미터를 제한하는데 사용된다.
+
+예> 파라미터 전달 객체 "examples.domain.Product"
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="Product">
+    
+    <statement id="statementName" parameterClass="examples.domain.Product">
+       insert into PRODUCT values(#id#, #description#, #price#)
+    </statement>
+
+</sqlMap>
+
+
+
+위와 같이 parameterClass를 사용하면 examples.domain.Product 객체의 id, description, price 변수의 값을
+#id#, #description#, #price#에 각각 매핑시키게 된다.
+(이때 각 변수는 get/set 메소드가 명시되어 있어야 한다.)
+
+parameterClass 를 사용하면 프레임워크가 먼저 타입을 알 수 있어 스스로 최적화 능력을 가지기 때문에 더 나은 성능을 보일 수 있다.
+
+
+
+
+
+2. parameterMap
+
+parameterMap 속성은 JDBC PreparedStatement의 값 토큰과 매치되는 정렬된 파라미터 목록을 명시한다.
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="Product">
+
+    <parameterMap id="insert-product-param" class="com.domain.Product">
+       <parameter property="id">
+       <parameter property="description">
+    </parameterMap>
+    
+    <statement id="statementName" parameterMap="insert-product-param">
+       insert into PRODUCT (PRD_ID, PRD_DESCRIPTION) values(?, ?);
+    </statement>
+
+</sqlMap>
+
+
+위와 같이 <parameterMap> 으로 파라미터 목록을 명시하고, <statement>에서 parameterMap 을 명시한 목록으로 지정하였다.
+<parameterMap> 의 명시된 id, description 순서로 <statement>에서 "?" 에 순서대로 대응된다.
+따라서 첫번째 "?" 에는 "id" 속성값에 대체되고 두번째는 "decription" 속성값에 대체된다.
+
+
+* 인라인 파라미터 사용
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="Product">
+
+    <parameterMap id="insert-product-param" class="com.domain.Product">
+       <parameter property="id">
+       <parameter property="description">
+    </parameterMap>
+    
+    <statement id="statementName" parameterMap="insert-product-param">
+       insert into PRODUCT (PRD_ID, PRD_DESCRIPTION) values(#id#, #description#);
+    </statement>
+
+</sqlMap>
+
+
+위와같이 인라인 파라미터로 활용할 수 있다. "?" 로 명시하면 <parameterMap> 의 속성에 순서대로 적용되지만, 
+위와 같이 인라인으로 작성하면 "id" 는 #id#로 "description" 은 #description# 으로 대체된다.
+
+
+
+출처: http://hyeonstorage.tistory.com/282 [개발이 하고 싶어요]
