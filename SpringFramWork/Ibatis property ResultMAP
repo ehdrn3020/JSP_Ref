@@ -1,0 +1,77 @@
+###resultClass, resultMap 사용 기본
+resultClass 와 resultMap 은 SQL의 조회 결과를 반환하는 방식을 지정하는 옵션이다.
+parameterClass와 parameterMap 이 쿼리 실행을 위해 input  되는 데이터를 정의하였다면, resultClass와 resultMap 은 결과 Output을 정의한다.
+
+
+
+[ibatis] parameterClass, parameterMap 사용 기본
+
+1. resultClass
+resultClass는 parameterClass와 마찬가지로 패키지명을 포함한 반환 객체를 명시한다.
+결과는 JDBC resultSet이 해당 객체에 자동 매핑되어 결과를 반환하도록 한다.
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="Product">
+
+    <statement id="getPerson" parameterClass="int" resultClass="examples.domain.Person">
+       SELECT
+                 PER_ID as id,
+                PER_FIRST_NAME as firstName,
+                PER_LAST_NAME as lastName,
+                PER_BIRTH_DATE as birthDate,
+                PER_WEIGHT_KG as weightInKilograms,
+                PER_HEIGHT_M as heightInMeters
+       FROM PERSON
+    WHERE PER_ID = #value#
+    </statement>
+
+</sqlMap>
+
+
+위의 예에서 Person 클래스는 id, firstName, lastName, birthDate, weightInKilograms, heightInMeters를 포함하는 프로퍼티를 가진다. 
+컬럼 별칭과 함께 대응되는 각각의 변수는 SQL select 문에 의해 매핑된다.
+컬럼 별칭은 데이터베이스 컬럼 이름이 매치되지 않을때만 필요하다.
+실행되었을때 Person 객체는 프로퍼티 이름과 컬럼명에 기반해서 초기화 되기 위해 매핑되는 result set 으로부터 초기화되고 결과를 반환한다.
+
+resultClass로 자동매핑하는데는 제한점이 있다. 출력 컬럼의 변수 타입을 명시할 수 없다. 
+Person 객체에 birthDate 변수가 Date 타입이라면, birthDate 값을 매핑시에 Date 타입으로 변환해야 하지만, resultClass로는 변환할 수 없다.
+이 문제는 resultMap 을 사용하여 해결할 수 있다.
+
+
+
+
+2. resultMap
+
+resultMap 태그는 좀 더 공통적이고 이해하기 쉬운 속성중 하나이다. resultMap의 값은 <resultMap> 의 id와 매핑된다.
+resultMap 속성을 사용하는 것은 result set 으로부터 데이터와 컬럼에 매핑되는 프로퍼티를 어떻게 반환할 것인지 명시한다.
+resultClass 속성을 사용하는 객체의 자동매핑과는 달리 resultMap은 각 컬럼 타입을 명시하고 null 값 대체 
+그리고 복합 프로퍼티맵핑(다른 자바빈즈, Collections, Wrapper 타입)을 허용한다.
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-2.dtd">
+    
+<sqlMap namespace="Product">
+
+    <resultMap id="get-product-result" class="com.ibatis.example.Product">
+         <result property="id" column="PRD_ID"/>
+         <result property="description" column="PRD_DESCRIPTION"/>
+    </resultMap>
+
+    <statement id="getPerson"  resultMap="get-product-result">
+       SELECT *
+       FROM PRODUCT
+    </statement>
+
+</sqlMap>
+
+
+위 예제에서 SQL쿼리로부터 ResultSet 은 resultMap 정의를 사용해서 Product 객체에 매핑한다.
+resultMap 은 "id" 프로퍼티가 "PRD_ID" 컬럼과 "PRD_DESCRIPTION" 컬럼에 의해 생성되는 "description" 프로퍼티에 생성된다.
+select *  역시 지원되며 ResultSet 내 반환되는 모든 컬럼을 매핑할 필요는 없다.
+
+
+출처: http://hyeonstorage.tistory.com/283 [개발이 하고 싶어요]
