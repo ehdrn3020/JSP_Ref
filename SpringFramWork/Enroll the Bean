@@ -1,0 +1,47 @@
+1. xml 을 이용한 등록 방법 - setter 이용
+
+
+1) applicationContext.xml
+<bean id="sqlMapClientTemplate" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+    <property name="sqlMapClient" ref="sqlMapClient"/>
+</bean>
+ 
+<bean id="loginDAO" class="com.mungchung.sample.login.LoginDAOImpl">
+    <property name="sqlMapClientTemplate" ref="sqlMapClientTemplate"/>
+</bean>
+
+
+2) Bean
+public class LoginDAOImpl implements LoginDAO {
+    private SqlMapClientTemplate sqlMapClientTemplate;
+    public void setSqlMapClientTemplate(SqlMapClientTemplate sqlMapClientTemplate) {
+        this.sqlMapClientTemplate = sqlMapClientTemplate;
+    }
+}
+ 
+
+ 
+
+2. xml 을 이용한 등록 방법 - 생성자 이용
+
+
+1) applicationContext.xml
+<bean id="sqlMapClientTemplate" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+    <property name="sqlMapClient" ref="sqlMapClient"/>
+</bean>
+ 
+<bean id="loginDAO" class="com.mungchung.sample.login.LoginDAOImpl">
+    <constructor-arg name="sqlMapClientTemplate" ref="sqlMapClientTemplate"/>
+</bean>
+
+
+2) Bean
+public class LoginDAOImpl implements LoginDAO {
+    private SqlMapClientTemplate sqlMapClientTemplate;
+    public LoginDAOImpl(SqlMapClientTemplate sqlMapClientTemplate) {
+        this.sqlMapClientTemplate = sqlMapClientTemplate;
+    }
+}
+
+
+출처: http://denodo1.tistory.com/188 [dBack]
