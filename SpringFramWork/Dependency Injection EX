@@ -1,0 +1,95 @@
+###Main.java###
+
+package com.test;
+
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
+
+public class Main {
+    public static void main(String[] args){
+        String configLoc = "classpath:applicationContext.xml";
+        AbstractApplicationContext ctx = new GenericXmlApplicationContext(configLoc);
+        Cal cal = ctx.getBean("Cal", Cal.class);
+        
+        cal.add();
+        cal.sub();
+    }
+}
+
+
+
+###Cal.java###
+
+package com.test;
+
+public class Cal {
+	proCal proc;
+	private int firstNum;
+	private int secondNum;
+	
+	public Cal(){}	
+	public proCal getProc() {
+		return proc;
+	}
+	public void setProc(proCal proc) {
+		this.proc = proc;
+	}
+	public int getFirstNum() {
+		return firstNum;
+	}
+	public void setFirstNum(int firstNum) {
+		this.firstNum = firstNum;
+	}
+	public int getSecondNum() {
+		return secondNum;
+	}
+	public void setSecondNum(int secondNum) {
+		this.secondNum = secondNum;
+	}
+
+	public void add(){
+        proc.additon(firstNum, secondNum);
+    }    
+    public void sub() {
+        proc.subtraction(firstNum, secondNum);
+    }
+}
+
+
+
+###proCal.java###
+
+package com.test;
+
+public class proCal {
+	
+	public void additon(int f, int s){
+		int result = f + s;
+		System.out.println(f+" + "+s+" = "+result);
+	}
+	
+	public void subtraction(int f, int s){
+		int result = f - s;
+		System.out.println(f+" - "+s+" = "+result);
+	}	
+}
+
+
+
+###applicaionContext.xml### ( Spring Bean Configuration File, location=src/main/resources)
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id ="proCal" class="com.test.proCal"/>
+	
+	<bean id ="Cal" class="com.test.Cal">
+		<property name = "proc">
+			<ref bean = "proCal"/>
+		</property>
+		<property name = "firstNum" value="1"/>
+		<property name = "secondNum" value="2"/>
+	</bean>
+</beans>
