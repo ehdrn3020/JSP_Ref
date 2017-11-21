@@ -1,0 +1,10 @@
+
+SqlMapClient 지원하는 메소드
+
+-queryForObject Method : 오직 하나의 레코드만 반환되는 sql구문을 실행할 때 사용하는 메소드
+-queryForList Method : 한 개 이상의 레코드가 반환되는 sql구문을 실행할 때 사용하는 메소드
+-queryForMap Method : 한개 혹은 그 이상의 레코드를 가져오거나 java.util.Map을 반환할 때 사용하는 메소드
+
+-insert Method
+-update Method
+-delete Method 
