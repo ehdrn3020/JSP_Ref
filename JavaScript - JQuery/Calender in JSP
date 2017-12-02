@@ -1,0 +1,21 @@
+Datepicker를 사용하기 위해서는 기본적으로 다음의 3가지 File을 import해야 합니다.
+
+// jQuery UI CSS파일 
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" />  
+// jQuery 기본 js파일
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>  
+// jQuery UI 라이브러리 js파일
+<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+
+
+//script구문 내부에 해당 메소드를 입력합니다.
+$(function() {
+    $( "#testDatepicker" ).datepicker({
+    });
+});
+위의 코드를 살펴보면 function 내부에 datepicker 선택자와 메소드로 이루어져 있습니다.
+
+
+//해당 메소드에서 선택자로 지명한 id가 testDatepicker인 input 태그를 추가합니다.
+<input type="text" id="testDatepicker">  
+
